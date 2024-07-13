@@ -99,19 +99,19 @@ with tb_faturamento_init as (
 	    	faturamentoano in ('2024')
 ), tb_faturamento_final as (
 	select 	fi.id,
-			fi.dataAtualizacao,
-			fi.idCliente,
-			fi.numeroNotaFiscalFaturamento,
-			fi.serieNotaFiscalFaturamento,
-			fi.cfopFaturamento,
-			fi.dataEmissaoFaturamento,
-			fi.statusNotaFiscalFaturamento,
-			fi.valorTotalProdutosFaturamento,
-			fi.valorTotalNfFaturamento,
-			fi.tipoFaturamento,
-			c.documento as documentoCliente,
-			f.filialcnpj as cnpjOrigemDados,
-			p.valorUnidadeMedida
+		fi.dataAtualizacao,
+		fi.idCliente,
+		fi.numeroNotaFiscalFaturamento,
+		fi.serieNotaFiscalFaturamento,
+		fi.cfopFaturamento,
+		fi.dataEmissaoFaturamento,
+		fi.statusNotaFiscalFaturamento,
+		fi.valorTotalProdutosFaturamento,
+		fi.valorTotalNfFaturamento,
+		fi.tipoFaturamento,
+		c.documento as documentoCliente,
+		f.filialcnpj as cnpjOrigemDados,
+		p.valorUnidadeMedida
 	from tb_faturamento_init as fi
 	left join seed.dw.cliente as c
 	on
