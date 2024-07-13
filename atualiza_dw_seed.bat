@@ -1,1 +1,0 @@
-python "C:\Projetos\Seed\atualiza_procedure_seed.py"
