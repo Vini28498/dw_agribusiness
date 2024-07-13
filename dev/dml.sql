@@ -4,12 +4,12 @@
 --cliente
 with tb_cliente_init as (
 	select	cargatimestamp as dataAtualizacao,
-			clientecodigo as id,
-			clientedescricao as nomeFantasia,
-			clientecpfcnpj as documento,
-			clientecelular as celular,
-			clientetelefone as telefoneFixo,
-			clienteemail as email
+		clientecodigo as id,
+		clientedescricao as nomeFantasia,
+		clientecpfcnpj as documento,
+		clientecelular as celular,
+		clientetelefone as telefoneFixo,
+		clienteemail as email
 	from data_raw."1250".cliente
 	where clientecodigo is not null
 ), tb_cnpj as (
@@ -19,41 +19,41 @@ with tb_cliente_init as (
 )
 select
 	tc.cnpjOrigemDados,
-    tci.dataAtualizacao,
-    tci.id,
-    tci.nomeFantasia,
-    tci.documento,
-    tci.celular,
-    tci.telefoneFixo,
-    tci.email
+	tci.dataAtualizacao,
+	tci.id,
+	tci.nomeFantasia,
+	tci.documento,
+	tci.celular,
+	tci.telefoneFixo,
+	tci.email
 from tb_cliente_init tci
 cross join tb_cnpj tc;
 
 --produto
 with tb_produto_init as (
 	select  produtocodigo as id,
-			p.cargatimestamp as dataAtualizacao,
-			cast(null as varchar(254)) as sku,
-			produtodescricao as descricao,
-			fabricantedescricao as branding,
-			case 
-				when produtodescricao like '%LT%'
-					then 'LT'
-				when produtodescricao like '%KG%'
-					then 'KG'
-				when produtodescricao like '% L%'
-					then 'LT'
-				else produtounidademedida
-			end as um,
-			produtosubgrupo as segmento,
-			REGEXP_SUBSTR(REGEXP_SUBSTR(produtodescricao, '[(](.*)[)]'), '[0-9]+') as valorUnidadeMedida,
-			produtofatorconversao as fatorConversaoQuantidade
+		p.cargatimestamp as dataAtualizacao,
+		cast(null as varchar(254)) as sku,
+		produtodescricao as descricao,
+		fabricantedescricao as branding,
+		case 
+			when produtodescricao like '%LT%'
+				then 'LT'
+			when produtodescricao like '%KG%'
+				then 'KG'
+			when produtodescricao like '% L%'
+				then 'LT'
+			else produtounidademedida
+		end as um,
+		produtosubgrupo as segmento,
+		REGEXP_SUBSTR(REGEXP_SUBSTR(produtodescricao, '[(](.*)[)]'), '[0-9]+') as valorUnidadeMedida,
+		produtofatorconversao as fatorConversaoQuantidade
 	from data_raw."1250".produto as p
 	inner join data_raw."1250".fabricante as ff
 	on
 		ff.fabricantecodigo = p.produtofabricante
 	where   (fabricantedescricao like '%manufacturer1%' or
-			fabricantedescricao like '%manufacturer2%' or
+		fabricantedescricao like '%manufacturer2%' or
 	    	fabricantedescricao like '%manufacturer3%') and
 	    	produtocodigo is not null
 ), tb_cnpj as (
@@ -78,23 +78,23 @@ cross join tb_cnpj tc;
 --faturamento
 with tb_faturamento_init as (
 	select	row_number() over (order by faturamentonumeronf) as id,
-			f.cargatimestamp as dataAtualizacao,
-			faturamentocliente as idCliente,
-			--documento do cliente tem que fazer relacionamento
-			faturamentonumeronf as numeroNotaFiscalFaturamento,
-			faturamentoserienf as serieNotaFiscalFaturamento,
-			faturamentocfop as cfopFaturamento,
-			cast(faturamentodata as date) as dataEmissaoFaturamento,
-			faturamentocancelado as statusNotaFiscalFaturamento,
-			cast(faturamentovalorbrutoitem as double precision) as valorTotalProdutosFaturamento,
-			cast(faturamentovaloritem as double precision) as valorTotalNfFaturamento,
-			faturamentosituacao as tipoFaturamento
+		f.cargatimestamp as dataAtualizacao,
+		faturamentocliente as idCliente,
+		--documento do cliente tem que fazer relacionamento
+		faturamentonumeronf as numeroNotaFiscalFaturamento,
+		faturamentoserienf as serieNotaFiscalFaturamento,
+		faturamentocfop as cfopFaturamento,
+		cast(faturamentodata as date) as dataEmissaoFaturamento,
+		faturamentocancelado as statusNotaFiscalFaturamento,
+		cast(faturamentovalorbrutoitem as double precision) as valorTotalProdutosFaturamento,
+		cast(faturamentovaloritem as double precision) as valorTotalNfFaturamento,
+		faturamentosituacao as tipoFaturamento
 	from data_raw."1250".faturamento as f
 	inner join data_raw."1250".fabricante as ff
 	on
 		ff.fabricantecodigo = f.faturamentofabricante
 	where   (fabricantedescricao like '%manufacturer1%' or
-			fabricantedescricao like '%manufacturer2%' or
+		fabricantedescricao like '%manufacturer2%' or
 	    	fabricantedescricao like '%manufacturer3%') and
 	    	faturamentoano in ('2024')
 ), tb_faturamento_final as (
@@ -177,7 +177,7 @@ with tb_faturamento_init as (
 	on
 		ff.fabricantecodigo = f.faturamentofabricante
 	where   (fabricantedescricao like '%manufacturer1%' or
-			fabricantedescricao like '%manufacturer2%' or
+		fabricantedescricao like '%manufacturer2%' or
 	    	fabricantedescricao like '%manufacturer3%') and
 	    	faturamentoano in ('2024')
 ), tb_faturamento_final as (
@@ -251,28 +251,28 @@ from tb_select_faturamento_item
 --estoque
 with tb_estoque_init as (
 	select  row_number() over (order by estoquedata) as id,
-			cast(estoquedata as date) as dataCadastro,
-			e.cargatimestamp as dataAtualizacao,
-			estoqueproduto as idItem,
-			--relacionar com produto
-			cast(estoquesaldo as double precision) as quantidadeDisponivel,
-			estoquefilial
+		cast(estoquedata as date) as dataCadastro,
+		e.cargatimestamp as dataAtualizacao,
+		estoqueproduto as idItem,
+		--relacionar com produto
+		cast(estoquesaldo as double precision) as quantidadeDisponivel,
+		estoquefilial
 	from data_raw."1250".estoque as e
 	inner join data_raw."1250".fabricante as ff
 	on
 		ff.fabricantecodigo = e.estoquefabricante
 	where   (fabricantedescricao like '%manufacturer1%' or
-			fabricantedescricao like '%manufacturer2%' or
+		fabricantedescricao like '%manufacturer2%' or
 	    	fabricantedescricao like '%manufacturer3%') and
 	    	estoqueano in ('2024')
 ), tb_estoque_final as (
 	select	f.filialcnpj as cnpjOrigemDados,
-		    ei.id,
-			ei.dataCadastro,
-			ei.dataAtualizacao,
-			ei.idItem,
-			ei.quantidadeDisponivel,
-			p.descricao
+		ei.id,
+		ei.dataCadastro,
+		ei.dataAtualizacao,
+		ei.idItem,
+		ei.quantidadeDisponivel,
+		p.descricao
 	from tb_estoque_init as ei
 	left join seed.dw.produto as p
 	on
@@ -283,7 +283,7 @@ with tb_estoque_init as (
 )
 select
 	ef.cnpjOrigemDados,
-    ef.id,
+    	ef.id,
 	ef.dataCadastro,
 	ef.dataAtualizacao,
 	ef.idItem,
