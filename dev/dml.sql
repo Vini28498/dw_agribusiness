@@ -182,32 +182,32 @@ with tb_faturamento_init as (
 	    	faturamentoano in ('2024')
 ), tb_faturamento_final as (
 	select 	fi.id,
-			fi.dataAtualizacao,
-			fi.numero,
-			fi.serie,
-			fi.dataEmissao,
-			fi.tipo,
-			case
-				when tipo = 0
-					then fi.id
-				else null
-			end as idNotaFiscalOrigem,
-			case
-				when tipo = 0
-					then fi.numeroNotaFiscalFaturamento
-				else null
-			end as notaFiscalOrigem,
-			fi.idItem,
-			p.descricao as descricaoItem,
-			fi.sku,
-			fi.loteItem,
-			fi.quantidadeItem,
-			(fi.faturamentovalorbrutoitem)/(fi.faturamentovolumeitem) as valorUnitarioItem,
-			fi.valorTotalItem,
-			fi.cfopItem,
-			v.vendedorcpf as cpfVendedor,
-			p.um as unidadeMedidaItem,
-			p.sku as skuItem
+		fi.dataAtualizacao,
+		fi.numero,
+		fi.serie,
+		fi.dataEmissao,
+		fi.tipo,
+		case
+			when tipo = 0
+				then fi.id
+			else null
+		end as idNotaFiscalOrigem,
+		case
+			when tipo = 0
+				then fi.numeroNotaFiscalFaturamento
+			else null
+		end as notaFiscalOrigem,
+		fi.idItem,
+		p.descricao as descricaoItem,
+		fi.sku,
+		fi.loteItem,
+		fi.quantidadeItem,
+		(fi.faturamentovalorbrutoitem)/(fi.faturamentovolumeitem) as valorUnitarioItem,
+		fi.valorTotalItem,
+		fi.cfopItem,
+		v.vendedorcpf as cpfVendedor,
+		p.um as unidadeMedidaItem,
+		p.sku as skuItem
 	from tb_faturamento_init as fi
 	left join seed.dw.cliente as c
 	on
